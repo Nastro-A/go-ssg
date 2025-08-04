@@ -45,7 +45,7 @@ func Listener(inputPath string, savePath string, title string, theme string) {
 			if event.Has(fsnotify.Create) {
 				filePath := event.Name
 				fmt.Printf("New file created: %s\n", filePath)
-				markdowntohtml.ConvertSingletoHTMLAndSave(filePath, savePath)
+				markdowntohtml.ConvertSingletoHTMLAndSave(filePath, savePath, theme)
 				indexhtml.IndexHTML(savePath, title, theme)
 			}
 			if event.Has(fsnotify.Rename) {

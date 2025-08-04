@@ -37,7 +37,7 @@ func saveHTML(file []byte, HTMLPath string, fileName string) error {
 	return nil
 }
 
-func ConvertSingletoHTMLAndSave(filepath string, savePath string) {
+func ConvertSingletoHTMLAndSave(filepath string, savePath string, theme string) {
 	file, err := os.ReadFile(filepath)
 	if err != nil {
 		log.Fatalf("Error reading file %s : %v", filepath, err)
@@ -47,7 +47,7 @@ func ConvertSingletoHTMLAndSave(filepath string, savePath string) {
 	if file == nil {
 		log.Fatalf("File empty, Ignoring %s", fileName)
 	}
-
+	fileNameWOExt := strings.Split(fileName, ".")[0]
 	if strings.Split(fileName, ".")[1] != "md" {
 		log.Printf("File %s not a markdown file", fileName)
 		return
@@ -60,7 +60,40 @@ func ConvertSingletoHTMLAndSave(filepath string, savePath string) {
 	opts := html.RendererOptions{Flags: htmlFlags}
 	renderer := html.NewRenderer(opts)
 	html := markdown.Render(doc, renderer)
-
+	html = []byte(`
+	<!DOCTYPE html>
+	<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.` + theme + `.min.css"
+    />
+    <title>` + fileNameWOExt + `</title>
+  </head>
+  <header>
+      <nav>
+        <ul>
+          <li></li>
+          <li><strong>` + fileNameWOExt + `</strong></li>
+        </ul>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li></li>
+        </ul>
+      </nav>
+    </header>
+  <body>
+	<main style="padding: 15px;">` + string(html) + `</main>
+	</body>
+  <footer>
+      <hr />
+      <p style="text-align: center;">Created with <a href="https://github.com/Nastro-A/go-ssg">go-ssg</a> and <a href="https://picocss.com/">pico</a></p>
+    </footer>
+</html>
+	`)
 	err = saveHTML(html, savePath, fileName)
 	if err != nil {
 		log.Fatalf("Error saving file %s : %v", fileName, err)

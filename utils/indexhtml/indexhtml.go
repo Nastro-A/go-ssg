@@ -81,7 +81,7 @@ func IndexHTML(dirPath string, title string, theme string) {
   </body>
   <footer>
       <hr />
-      <p style="text-align: center;">Created with <a href="http://www.github.com/Nastro-A/go-ssg">go-ssg</a> and <a href="https://picocss.com/">pico</a></p>
+      <p style="text-align: center;">Created with <a href="https://github.com/Nastro-A/go-ssg">go-ssg</a> and <a href="https://picocss.com/">pico</a></p>
     </footer>
 </html>`
 
