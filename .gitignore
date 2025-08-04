@@ -1,0 +1,4 @@
+go-ssg
+.env
+html/*
+markdown/*
