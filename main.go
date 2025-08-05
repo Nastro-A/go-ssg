@@ -9,8 +9,8 @@ import (
 	"os"
 	"strings"
 
-	"git.doganeplatz.eu/nastro/indexhtml"
-	"git.doganeplatz.eu/nastro/listener"
+	"git.doganeplatz.eu/nastro/go-ssg/utils/indexhtml"
+	"git.doganeplatz.eu/nastro/go-ssg/utils/listener"
 	"github.com/joho/godotenv"
 )
 

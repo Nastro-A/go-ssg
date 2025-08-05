@@ -1,13 +1,15 @@
 package listener
 
 import (
+	"errors"
 	"fmt"
+	"io/fs"
 	"log"
 	"os"
 	"strings"
 
-	"git.doganeplatz.eu/nastro/indexhtml"
-	"git.doganeplatz.eu/nastro/markdowntohtml"
+	"git.doganeplatz.eu/nastro/go-ssg/utils/indexhtml"
+	"git.doganeplatz.eu/nastro/go-ssg/utils/markdowntohtml"
 	"github.com/fsnotify/fsnotify"
 )
 
@@ -18,7 +20,12 @@ func deleteFile(filePath string, savePath string) {
 	htmlName := strings.Join([]string{fileName, "html"}, ".")
 	array := [2]string{savePath, htmlName}
 	savePath = strings.Join(array[:], "/")
-	err := os.Remove(savePath)
+	_, err := os.Stat(savePath)
+	if errors.Is(err, fs.ErrNotExist) {
+		log.Printf("Error removing file %s : %v\n", fileName, err)
+		return
+	}
+	err = os.Remove(savePath)
 	if err != nil {
 		log.Printf("Error removing file %s : %v\n", fileName, err)
 	}

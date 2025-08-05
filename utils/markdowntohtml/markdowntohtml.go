@@ -111,7 +111,6 @@ func ConvertSingletoHTMLAndSave(filepath string, savePath string, theme string) 
 </html>
 	`
 	tempPath := strings.Join([]string{savePath, "tmp", "article.html"}, "/")
-	log.Println(tempPath)
 	temlpateToHTML(htmlTemp, data, tempPath)
 
 	err = saveHTML(tempPath, savePath, fileName)

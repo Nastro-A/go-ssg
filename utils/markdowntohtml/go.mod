@@ -1,4 +1,4 @@
-module git.doganeplatz.eu/nastro/markdowntohtml
+module git.doganeplatz.eu/nastro/go-ssg/utils/markdowntohtml
 
 go 1.24.5
 
