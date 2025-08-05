@@ -9,9 +9,9 @@ import (
 	"os"
 	"strings"
 
-	"git.doganeplatz.eu/nastro/go-ssg/utils/indexhtml"
-	"git.doganeplatz.eu/nastro/go-ssg/utils/listener"
 	"github.com/joho/godotenv"
+	"github.com/nastro-a/go-ssg/utils/indexhtml"
+	"github.com/nastro-a/go-ssg/utils/listener"
 )
 
 func ifNotExistsMkDir(dirPath string) bool {

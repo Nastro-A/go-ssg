@@ -8,9 +8,9 @@ import (
 	"os"
 	"strings"
 
-	"git.doganeplatz.eu/nastro/go-ssg/utils/indexhtml"
-	"git.doganeplatz.eu/nastro/go-ssg/utils/markdowntohtml"
 	"github.com/fsnotify/fsnotify"
+	"github.com/nastro-a/go-ssg/utils/indexhtml"
+	"github.com/nastro-a/go-ssg/utils/markdowntohtml"
 )
 
 func deleteFile(filePath string, savePath string) {
