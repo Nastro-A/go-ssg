@@ -127,7 +127,7 @@ func IndexHTML(mdPath string, dirPath string, title string, theme string) {
   <body>
     <ul>
       {{range .Files}}
-      <li><a href="{{.Href}}">{{.Label}} </a>{{.Date}}</li>
+      <li><a href="{{.Href}}">{{.Label}}</a> {{.Date}}</li>
 			<p>{{.Snippet1}}<br />{{.Snippet2}}<br />{{.Snippet3}}</p>
       {{end}}
     </ul>

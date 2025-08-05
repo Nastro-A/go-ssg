@@ -1,0 +1,12 @@
+services:
+  go-ssg:
+    image: nastroa/go-ssg
+    restart: always
+    environment:
+      - "HTML_TITLE=Nastro's Blog"
+      - "THEME=cyan"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./html:/go-ssg/html
+      - ./markdown:/go-ssg/markdown
