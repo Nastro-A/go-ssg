@@ -46,14 +46,14 @@ func Listener(inputPath string, savePath string, title string, theme string) {
 				filePath := event.Name
 				fmt.Printf("New file created: %s\n", filePath)
 				markdowntohtml.ConvertSingletoHTMLAndSave(filePath, savePath, theme)
-				indexhtml.IndexHTML(savePath, title, theme)
+				indexhtml.IndexHTML(inputPath, savePath, title, theme)
 			}
 			if event.Has(fsnotify.Rename) {
 				filePath := event.Name
 				fmt.Println(filePath)
 				deleteFile(filePath, savePath)
 				fmt.Printf("Removed file: %s\n", filePath)
-				indexhtml.IndexHTML(savePath, title, theme)
+				indexhtml.IndexHTML(inputPath, savePath, title, theme)
 			}
 		case err, ok := <-watcher.Errors:
 			if !ok {

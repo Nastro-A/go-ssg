@@ -19,7 +19,11 @@ func ifNotExistsMkDir(dirPath string) bool {
 	if errors.Is(err, fs.ErrNotExist) {
 		err = os.Mkdir(dirPath, 0700)
 		if err != nil {
-			log.Fatalf("Error in creating the %s files directory: %v\n", dirPath, err)
+			log.Fatalf("Error creating %s directory: %v\n", dirPath, err)
+		}
+		err = os.Mkdir(strings.Join([]string{dirPath, "tmp"}, "/"), 0700)
+		if err != nil {
+			log.Fatalln("Error creating tmp folder")
 		}
 	} else {
 		return false
@@ -58,7 +62,7 @@ func main() {
 		fmt.Println("Directory creation succeded")
 	}
 
-	indexhtml.IndexHTML(HTMLDir, title, theme)
+	indexhtml.IndexHTML(MDDir, HTMLDir, title, theme)
 	fmt.Println("index.html creation succeded")
 
 	fmt.Println("Starting watcher...")

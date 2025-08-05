@@ -2,6 +2,7 @@ package markdowntohtml
 
 import (
 	"errors"
+	"html/template"
 	"io/fs"
 	"log"
 	"os"
@@ -25,16 +26,25 @@ func RetriveMDFiles(dirpath string) ([]os.DirEntry, error) {
 	return files, nil
 }
 
-func saveHTML(file []byte, HTMLPath string, fileName string) error {
+func saveHTML(filePath string, HTMLPath string, fileName string) error {
+	file, err := os.ReadFile(filePath)
+	if err != nil {
+		return err
+	}
 	fileName = strings.Split(fileName, ".")[0]
 	htmlFileName := []string{fileName, "html"}
 	fileName = strings.Join(htmlFileName, ".")
 	path := []string{HTMLPath, fileName}
-	err := os.WriteFile(strings.Join(path, "/"), file, 0700)
+	err = os.WriteFile(strings.Join(path, "/"), file, 0700)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+type ArticleData struct {
+	Title string
+	Theme string
 }
 
 func ConvertSingletoHTMLAndSave(filepath string, savePath string, theme string) {
@@ -60,7 +70,13 @@ func ConvertSingletoHTMLAndSave(filepath string, savePath string, theme string) 
 	opts := html.RendererOptions{Flags: htmlFlags}
 	renderer := html.NewRenderer(opts)
 	html := markdown.Render(doc, renderer)
-	html = []byte(`
+
+	data := ArticleData{
+		Title: fileNameWOExt,
+		Theme: theme,
+	}
+
+	htmlTemp := `
 	<!DOCTYPE html>
 	<html lang="en">
   <head>
@@ -69,15 +85,15 @@ func ConvertSingletoHTMLAndSave(filepath string, savePath string, theme string) 
     <meta name="color-scheme" content="light dark" />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.` + theme + `.min.css"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.{{.Theme}}.min.css"
     />
-    <title>` + fileNameWOExt + `</title>
+    <title>{{.Title}}</title>
   </head>
   <header>
       <nav>
         <ul>
           <li></li>
-          <li><strong>` + fileNameWOExt + `</strong></li>
+          <li><strong>{{.Title}}</strong></li>
         </ul>
         <ul>
           <li><a href="index.html">Home</a></li>
@@ -93,9 +109,26 @@ func ConvertSingletoHTMLAndSave(filepath string, savePath string, theme string) 
       <p style="text-align: center;">Created with <a href="https://github.com/Nastro-A/go-ssg">go-ssg</a> and <a href="https://picocss.com/">pico</a></p>
     </footer>
 </html>
-	`)
-	err = saveHTML(html, savePath, fileName)
+	`
+	tempPath := strings.Join([]string{savePath, "tmp", "article.html"}, "/")
+	log.Println(tempPath)
+	temlpateToHTML(htmlTemp, data, tempPath)
+
+	err = saveHTML(tempPath, savePath, fileName)
 	if err != nil {
 		log.Fatalf("Error saving file %s : %v", fileName, err)
+	}
+}
+
+func temlpateToHTML(temp string, data ArticleData, outputPath string) {
+	f, err := os.Create(outputPath)
+	if err != nil {
+		log.Fatalln("Error creating Article")
+	}
+
+	t := template.Must(template.New("index").Parse(temp))
+	err = t.Execute(f, data)
+	if err != nil {
+		log.Printf("Error in creating index.html")
 	}
 }
